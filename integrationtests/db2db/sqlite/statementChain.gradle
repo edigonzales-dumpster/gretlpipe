@@ -1,0 +1,32 @@
+import ch.so.agi.gretl.steps.*
+
+buildscript {
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath group: 'gretl', name: 'gretl',  version: '0.9'
+    }
+}
+
+task aToB(type: Db2DbTask) {
+    sourceDb =  ['jdbc:sqlite:/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/tmp/db2db/postitiveStatementChainA.sqlite',null,null]
+    targetDb = ['jdbc:sqlite:/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/tmp/db2db/postitiveStatementChainB.sqlite',null,null]
+    transferSet = [
+            new TransferSet(true, '/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/db2db/sqlite/statementChain_AToB.sql', 'albums_intermediate')
+    ];
+}
+
+task bToA(type: Db2DbTask, dependsOn: 'aToB'){
+    sourceDb =  ['jdbc:sqlite:/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/tmp/db2db/postitiveStatementChainB.sqlite',null,null]
+    targetDb = ['jdbc:sqlite:/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/tmp/db2db/postitiveStatementChainA.sqlite',null,null]
+    transferSet = [
+            new TransferSet(true, '/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/db2db/sqlite/statementChain_BToA.sql', 'albums_dest')
+    ];
+}
+
+
+

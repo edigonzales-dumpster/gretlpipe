@@ -1,0 +1,1 @@
+select * from albums_intermediate

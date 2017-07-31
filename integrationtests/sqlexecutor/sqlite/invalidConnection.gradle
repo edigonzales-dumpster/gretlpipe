@@ -1,0 +1,19 @@
+import ch.so.agi.gretl.steps.*
+
+buildscript {
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath group: 'gretl', name: 'gretl',  version: '0.9'
+    }
+}
+
+
+task invalidConnection(type: SqlExecutorTask){
+    database = ['jdbc:sqlite:/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/tmp/sqlexecutor/dummy.sqlite',null,null]
+    sqlFiles = ['/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/sqlexecutor/sqlite/invalidConnection.sql']
+}

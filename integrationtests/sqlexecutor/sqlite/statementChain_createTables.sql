@@ -1,0 +1,2 @@
+CREATE TABLE albums_src(title text, artist text, release_date text, publisher text, media_type text);
+CREATE TABLE albums_dest(title text, artist text, release_date text, publisher text, media_type text);

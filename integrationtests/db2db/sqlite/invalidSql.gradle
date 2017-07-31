@@ -1,0 +1,22 @@
+import ch.so.agi.gretl.steps.*
+
+buildscript {
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath group: 'gretl', name: 'gretl',  version: '0.9'
+    }
+}
+
+task invalidSql(type: Db2DbTask) {
+    sourceDb =  ['jdbc:sqlite:/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/tmp/db2db/invalidSql_Source.sqlite',null,null]
+    targetDb = ['jdbc:sqlite:/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/tmp/db2db/invalidSql_Target.sqlite',null,null]
+    transferSet = [
+            new TransferSet(false, '/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/db2db/sqlite/invalidSql.sql', 'albums_dest')
+    ];
+}
+
