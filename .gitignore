@@ -6,6 +6,18 @@ __pycache__/
 # C extensions
 *.so
 
+# exclude intellij *.iml files
+**/*.iml
+
+# exclude .idea directories
+**/.idea/
+
+# exclude .gradle directories
+**/.gradle/
+
+# exclude temp directories
+**/tmp/
+
 # Distribution / packaging
 .Python
 env/
