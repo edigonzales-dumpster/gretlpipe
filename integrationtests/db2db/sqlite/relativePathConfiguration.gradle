@@ -1,0 +1,21 @@
+import ch.so.agi.gretl.steps.*
+
+buildscript {
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath group: 'gretl', name: 'gretl',  version: '0.9'
+    }
+}
+
+task relativePathConfiguration(type: Db2DbTask) {
+    sourceDb =  ['jdbc:sqlite:/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/tmp/db2db/relativePathConfiguration.sqlite',null,null]
+    targetDb = ['jdbc:sqlite:/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/tmp/db2db/relativePathConfiguration.sqlite',null,null]
+    transferSets = [
+            new TransferSet('relativePathConfiguration.sql', 'albums_dest', true)
+    ];
+}

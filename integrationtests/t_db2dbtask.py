@@ -10,7 +10,7 @@ class TestDb2DbTask(unittest.TestCase):
     """
 
 
-    def ttest_positiveSqlite2Postgres(self):
+    def test_positiveSqlite2Postgres(self):
         """
         Test's that transferring rows from an sqlexecutor databse to a postgres database
         results in the correct number of rows transferred.
@@ -19,8 +19,31 @@ class TestDb2DbTask(unittest.TestCase):
 
         # todo implementieren....
 
+    def test_relativePathConfiguration_Sqlite(self):
+        """
+        Test's that the *.grade configuration of the sql files
+        can be relative to the location of the gradle project (aka the *.gradle file)
+        """
+        dbPath = "tmp/db2db/relativePathConfiguration.sqlite"
 
-    def test_positiveStatementChain_Sqlite(self):
+        conn = None
+        try:
+            conn = sqlsteps_common.connectToNewSqliteDb(dbPath)
+            sqlsteps_common.prepareSrcAndDestTables(conn)
+
+            sqlsteps_common.closeSqliteConnection(conn)
+
+            res = os.system(
+                "gradle -b /home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/db2db/sqlite/relativePathConfiguration.gradle relativePathConfiguration")
+
+            sqlsteps_common.assertGradleBuildReturnValue(True, res, self)
+
+        finally:
+            sqlsteps_common.closeSqliteConnection(conn)
+
+
+
+    def test_statementChain_Sqlite(self):
         """
         Test's that a chain of statements executes properly and results in the correct
         number of inserts (corresponding to the last statement)

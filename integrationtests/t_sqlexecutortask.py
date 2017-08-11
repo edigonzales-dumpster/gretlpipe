@@ -37,6 +37,28 @@ class TestSqlExecutorTask(unittest.TestCase):
             if conn is not None:
                 conn.close()
 
+    def test_relativePathConfiguration_Sqlite(self):
+        """
+        Test's that the *.grade configuration of the sql files
+        can be relative to the location of the gradle project (aka the *.gradle file)
+        """
+        dbPath = "tmp/sqlexecutor/relativePathConfiguration.sqlite"
+
+        conn = None
+        try:
+            conn = sqlsteps_common.connectToNewSqliteDb(dbPath)
+            sqlsteps_common.prepareSrcAndDestTables(conn)
+            conn.close()
+
+            res = os.system(
+                "gradle -b /home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/sqlexecutor/sqlite/relativePathConfiguration.gradle relativePathConfiguration")
+
+            sqlsteps_common.assertGradleBuildReturnValue(True, res, self)
+
+        finally:
+            if conn is not None:
+                conn.close()
+
 
     def test_positiveStatementChain_Sqlite(self):
         """

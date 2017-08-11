@@ -16,6 +16,6 @@ task invalidTargetConnection(type: Db2DbTask) {
     sourceDb =  ['jdbc:sqlite:/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/tmp/db2db/invalidTargetConnection_SourceDb.sqlite',null,null]
     targetDb = ['jdbc:sqlite:/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/tmp/db2db/dummyTarget.sqlite',null,null]
     transferSet = [
-            new TransferSet(true, '/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/db2db/sqlite/invalidTargetConnection.sql', 'dummy')
+            new TransferSet('/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/db2db/sqlite/invalidTargetConnection.sql', 'dummy', true)
     ];
 }
