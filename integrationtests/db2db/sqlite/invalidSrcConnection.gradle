@@ -3,12 +3,19 @@ import ch.so.agi.gretl.steps.*
 buildscript {
 
     repositories {
-        mavenLocal()
         mavenCentral()
+        maven{
+            name gretlRepoName
+            url gretlRepoUrl
+            credentials {
+                username gretlRepoReaderName
+                password gretlRepoReaderPass
+            }
+        }
     }
 
     dependencies {
-        classpath group: 'gretl', name: 'gretl',  version: '0.9'
+        classpath group: 'ch.so.agi', name: 'gretl',  version: '1.0.+'
     }
 }
 

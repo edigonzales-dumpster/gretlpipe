@@ -9,16 +9,6 @@ class TestDb2DbTask(unittest.TestCase):
     Executes the integration tests for the SqlExecutor Gradle Task
     """
 
-
-    def test_positiveSqlite2Postgres(self):
-        """
-        Test's that transferring rows from an sqlexecutor databse to a postgres database
-        results in the correct number of rows transferred.
-        """
-        raise NotImplementedError()
-
-        # todo implementieren....
-
     def test_relativePathConfiguration_Sqlite(self):
         """
         Test's that the *.grade configuration of the sql files
