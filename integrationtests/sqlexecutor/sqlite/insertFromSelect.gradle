@@ -1,24 +1,5 @@
 import ch.so.agi.gretl.steps.*
 
-buildscript {
-
-    repositories {
-        mavenCentral()
-        maven{
-            name gretlRepoName
-            url gretlRepoUrl
-            credentials {
-                username gretlRepoReaderName
-                password gretlRepoReaderPass
-            }
-        }
-    }
-
-    dependencies {
-        classpath group: 'ch.so.agi', name: 'gretl',  version: '1.0.+'
-    }
-}
-
 task sqlExecutor(type: SqlExecutorTask){
     database = ['jdbc:sqlite:/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/tmp/sqlexecutor/insertFromSelect.sqlite',null,null]
     sqlFiles = ['/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/sqlexecutor/sqlite/insertFromSelect.sql']
