@@ -13,17 +13,19 @@ class TestSqlExecutorTask(unittest.TestCase):
         """
         Test's that a correct "insert into select from" inserts the proper number of rows
         """
-        dbPath = "tmp/sqlexecutor/insertFromSelect.sqlite"
+        dbsDir = sqlsteps_common.absDir('tmp/sqlexecutor/insertFromSelect')
+        dbName = 'db.sqlite'
+
         conn = None
         try:
-            conn = sqlsteps_common.connectToNewSqliteDb(dbPath)
+            conn = sqlsteps_common.connectToNewSqliteDb(dbsDir, dbName)
 
             expectedCount = sqlsteps_common.prepareSrcAndDestTables(conn)
             conn.close()
 
-            res = sqlsteps_common.runGradle("sqlexecutor/sqlite/insertFromSelect.gradle", "sqlExecutor")
+            res = sqlsteps_common.runGradle("sqlexecutor/sqlite/insertFromSelect.gradle", "sqlExecutor", dbsDir)
 
-            conn = sqlite3.connect(dbPath)
+            conn = sqlsteps_common.connectToExistingSqliteDb(dbsDir, dbName)
             cursor = conn.cursor()
 
             cursor.execute("""select count(*) from albums_dest""")
@@ -41,15 +43,15 @@ class TestSqlExecutorTask(unittest.TestCase):
         Test's that the *.grade configuration of the sql files
         can be relative to the location of the gradle project (aka the *.gradle file)
         """
-        dbPath = "tmp/sqlexecutor/relativePathConfiguration.sqlite"
+        dbsDir = sqlsteps_common.absDir('tmp/sqlexecutor/relativePathConfiguration')
 
         conn = None
         try:
-            conn = sqlsteps_common.connectToNewSqliteDb(dbPath)
+            conn = sqlsteps_common.connectToNewSqliteDb(dbsDir, 'db.sqlite')
             sqlsteps_common.prepareSrcAndDestTables(conn)
             conn.close()
 
-            res = sqlsteps_common.runGradle("sqlexecutor/sqlite/relativePathConfiguration.gradle", "relativePathConfiguration")
+            res = sqlsteps_common.runGradle("sqlexecutor/sqlite/relativePathConfiguration.gradle", "relativePathConfiguration", dbsDir)
 
             sqlsteps_common.assertGradleBuildReturnValue(True, res, self)
 
@@ -66,16 +68,17 @@ class TestSqlExecutorTask(unittest.TestCase):
         2. statement: fill the source table with rows
         3. statement: execute the "insert into select from" statement
         """
-        dbPath = "tmp/sqlexecutor/postitiveStatementChain.sqlite"
+        dbsDir = sqlsteps_common.absDir('tmp/sqlexecutor/postitiveStatementChain')
+        dbName = 'db.sqlite'
 
         conn = None
         try:
-            conn = sqlsteps_common.connectToNewSqliteDb(dbPath)
+            conn = sqlsteps_common.connectToNewSqliteDb(dbsDir, dbName)
             conn.close()
 
-            res = sqlsteps_common.runGradle("sqlexecutor/sqlite/statementChain.gradle", "insertInto")
+            res = sqlsteps_common.runGradle("sqlexecutor/sqlite/statementChain.gradle", "insertInto", dbsDir)
 
-            conn = sqlite3.connect(dbPath)
+            conn = sqlsteps_common.connectToExistingSqliteDb(dbsDir, dbName)
 
             srcCurs = conn.cursor()
             srcCurs.execute("""select count(*) from albums_src""")
@@ -99,7 +102,7 @@ class TestSqlExecutorTask(unittest.TestCase):
         Test's if the return value from the gradle build is <> 0 when trying to
         connect to a non existant database file
         """
-        res = sqlsteps_common.runGradle("sqlexecutor/sqlite/invalidConnection.gradle", "invalidConnection")
+        res = sqlsteps_common.runGradle("sqlexecutor/sqlite/invalidConnection.gradle", "invalidConnection", "dummy")
 
         sqlsteps_common.assertGradleBuildReturnValue(False, res, self)
 
@@ -108,14 +111,14 @@ class TestSqlExecutorTask(unittest.TestCase):
         """
         Test's that a invalid sql statement on a valid database fails the gradle build
         """
-        dbPath = "tmp/sqlexecutor/invalidSql.sqlite"
+        dbsDir = sqlsteps_common.absDir('tmp/sqlexecutor/invalidSql')
 
         conn = None
         try:
-            conn = sqlsteps_common.connectToNewSqliteDb(dbPath)
+            conn = sqlsteps_common.connectToNewSqliteDb(dbsDir, 'db.sqlite')
             conn.close()
 
-            res = sqlsteps_common.runGradle("sqlexecutor/sqlite/invalidSql.gradle", "invalidSql")
+            res = sqlsteps_common.runGradle("sqlexecutor/sqlite/invalidSql.gradle", "invalidSql", dbsDir)
 
             sqlsteps_common.assertGradleBuildReturnValue(False, res, self)
 

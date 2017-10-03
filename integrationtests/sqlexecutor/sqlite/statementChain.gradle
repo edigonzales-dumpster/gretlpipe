@@ -1,16 +1,18 @@
 import ch.so.agi.gretl.steps.*
 
+def  dbURI = 'jdbc:sqlite:' + dbsDir + '/db.sqlite'
+
 task createTables(type: SqlExecutorTask){
-    database = ['jdbc:sqlite:/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/tmp/sqlexecutor/postitiveStatementChain.sqlite',null,null]
-    sqlFiles = ['/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/sqlexecutor/sqlite/statementChain_createTables.sql']
+    database = [dbURI, null, null]
+    sqlFiles = ['statementChain_createTables.sql']
 }
 
 task fillSrcTable(type: SqlExecutorTask, dependsOn: 'createTables'){
-    database = ['jdbc:sqlite:/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/tmp/sqlexecutor/postitiveStatementChain.sqlite',null,null]
-    sqlFiles = ['/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/sqlexecutor/sqlite/statementChain_fillSrcTable.sql']
+    database = [dbURI, null, null]
+    sqlFiles = ['statementChain_fillSrcTable.sql']
 }
 
 task insertInto(type: SqlExecutorTask, dependsOn: 'fillSrcTable'){
-    database = ['jdbc:sqlite:/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/tmp/sqlexecutor/postitiveStatementChain.sqlite',null,null]
-    sqlFiles = ['/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/sqlexecutor/sqlite/statementChain_insertIntoDestTable.sql']
+    database = [dbURI, null, null]
+    sqlFiles = ['statementChain_insertIntoDestTable.sql']
 }

@@ -1,0 +1,16 @@
+allprojects {
+    buildscript {
+
+        repositories {
+            mavenCentral()
+            maven{
+                name "AIO AGI Repository"
+                url "https://artifactory.verw.rootso.org/artifactory/repo-agi-local"
+            }
+        }
+
+        dependencies {
+            classpath group: 'ch.so.agi', name: 'gretl',  version: '1.0.1'
+        }
+    }
+}

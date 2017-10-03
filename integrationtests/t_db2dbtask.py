@@ -14,16 +14,16 @@ class TestDb2DbTask(unittest.TestCase):
         Test's that the *.grade configuration of the sql files
         can be relative to the location of the gradle project (aka the *.gradle file)
         """
-        dbPath = "tmp/db2db/relativePathConfiguration.sqlite"
+        dbsDir = sqlsteps_common.absDir('tmp/db2db/relativePathConfiguration')
 
         conn = None
         try:
-            conn = sqlsteps_common.connectToNewSqliteDb(dbPath)
+            conn = sqlsteps_common.connectToNewSqliteDb(dbsDir, 'db.sqlite')
             sqlsteps_common.prepareSrcAndDestTables(conn)
 
             sqlsteps_common.closeSqliteConnection(conn)
 
-            res = sqlsteps_common.runGradle("db2db/sqlite/relativePathConfiguration.gradle", "relativePathConfiguration")
+            res = sqlsteps_common.runGradle("db2db/sqlite/relativePathConfiguration.gradle", "relativePathConfiguration", dbsDir)
 
             sqlsteps_common.assertGradleBuildReturnValue(True, res, self)
 
@@ -39,19 +39,18 @@ class TestDb2DbTask(unittest.TestCase):
         1. Statement transfers rows from a to b
         2. Statement transfers rows from b to a
         """
-        dbPathA = "tmp/db2db/postitiveStatementChainA.sqlite"
-        dbPathB = "tmp/db2db/postitiveStatementChainB.sqlite"
+        dbsDir = sqlsteps_common.absDir('tmp/db2db/postitiveStatementChain')
 
         connA = None
         connB = None
         try:
-            connA = sqlsteps_common.connectToNewSqliteDb(dbPathA)
-            connB = sqlsteps_common.connectToNewSqliteDb(dbPathB)
+            connA = sqlsteps_common.connectToNewSqliteDb(dbsDir, 'a.sqlite')
+            connB = sqlsteps_common.connectToNewSqliteDb(dbsDir, 'b.sqlite')
 
             srcRowCount = sqlsteps_common.prepareSrcAndDestTables(connA)
             self._statementChain_prepareDbB(connB)
 
-            res = sqlsteps_common.runGradle("db2db/sqlite/statementChain.gradle",  "bToA")
+            res = sqlsteps_common.runGradle("db2db/sqlite/statementChain.gradle",  "bToA", dbsDir)
 
             cursor = connA.cursor()
             cursor.execute("""select count(*) from albums_dest""")
@@ -85,14 +84,14 @@ class TestDb2DbTask(unittest.TestCase):
         Test's if the return value from the gradle build is <> 0 when trying to
         connect to a non existant database file
         """
-        dbPath = "tmp/db2db/invalidSrcConnection_TargetDb.sqlexecutor"
+        dbsDir = sqlsteps_common.absDir('tmp/db2db/invalidSrcConnection')
         connection = None
 
         try:
-            connection = sqlsteps_common.connectToNewSqliteDb(dbPath)
+            connection = sqlsteps_common.connectToNewSqliteDb(dbsDir, 'db.sqlite')
             sqlsteps_common.closeSqliteConnection(connection)
 
-            res = sqlsteps_common.runGradle("db2db/sqlexecutor/invalidSrcConnection.gradle", "invalidSrcConnection")
+            res = sqlsteps_common.runGradle("db2db/sqlite/invalidSrcConnection.gradle", "invalidSrcConnection", dbsDir)
 
             sqlsteps_common.assertGradleBuildReturnValue(False, res, self)
 
@@ -105,14 +104,14 @@ class TestDb2DbTask(unittest.TestCase):
         Test's if the return value from the gradle build is <> 0 when trying to
         connect to a non existant database file
         """
-        dbPath = "tmp/db2db/invalidTargetConnection_SourceDb.sqlexecutor"
+        dbsDir = sqlsteps_common.absDir('tmp/db2db/invalidTargetConnection')
         connection = None
 
         try:
-            connection = sqlsteps_common.connectToNewSqliteDb(dbPath)
+            connection = sqlsteps_common.connectToNewSqliteDb(dbsDir, 'db.sqlite')
             sqlsteps_common.closeSqliteConnection(connection)
 
-            res = sqlsteps_common.runGradle("db2db/sqlexecutor/invalidTargetConnection.gradle", "invalidTargetConnection")
+            res = sqlsteps_common.runGradle("db2db/sqlite/invalidTargetConnection.gradle", "invalidTargetConnection", dbsDir)
 
             sqlsteps_common.assertGradleBuildReturnValue(False, res, self)
 
@@ -124,20 +123,19 @@ class TestDb2DbTask(unittest.TestCase):
         """
         Test's that a invalid sql statement on a valid database fails the gradle build
         """
-        dbPathSrc = "tmp/db2db/invalidSql_Source.sqlexecutor"
-        dbPathDest = "tmp/db2db/invalidSql_Target.sqlexecutor"
+        dbsDir = sqlsteps_common.absDir('tmp/db2db/invalidSql')
 
         srcConn = None
         targetConn = None
         try:
-            srcConn = sqlsteps_common.connectToNewSqliteDb(dbPathSrc)
-            targetConn = sqlsteps_common.connectToNewSqliteDb(dbPathSrc)
+            srcConn = sqlsteps_common.connectToNewSqliteDb(dbsDir, 'source.sqlite')
+            targetConn = sqlsteps_common.connectToNewSqliteDb(dbsDir, 'target.sqlite')
             sqlsteps_common.prepareSrcAndDestTables(targetConn)
 
             sqlsteps_common.closeSqliteConnection(srcConn)
             sqlsteps_common.closeSqliteConnection(targetConn)
 
-            res = sqlsteps_common.runGradle("db2db/sqlexecutor/invalidSql.gradle", "invalidSql")
+            res = sqlsteps_common.runGradle("db2db/sqlite/invalidSql.gradle", "invalidSql", dbsDir)
 
             sqlsteps_common.assertGradleBuildReturnValue(False, res, self)
 

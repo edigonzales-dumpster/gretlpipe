@@ -1,5 +1,6 @@
 import sqlite3
 import os.path
+import tempfile
 
 def assertGradleBuildReturnValue(expectSuccessfulBuild, buildReturnValue, owningTestCase):
     if expectSuccessfulBuild:
@@ -10,17 +11,37 @@ def assertGradleBuildReturnValue(expectSuccessfulBuild, buildReturnValue, owning
 
         #todo sqlexecutor Tests auf diese Methode refactoren
 
+def uniqueDbPath():
+    dbDir = tempfile.mkdtemp()
+    return os.path.join(dbDir, 'testdb.db')
 
-def connectToNewSqliteDb(relPathToDb):
+def absDir(relDirPath):
     pySkriptPath = os.path.dirname(os.path.abspath(__file__))
-    pathToDb = os.path.join(pySkriptPath, relPathToDb)
+    return os.path.join(pySkriptPath, relDirPath)
+
+
+def connectToNewSqliteDb(dbsDir, dbName):
+
+    if not os.path.exists(dbsDir):
+        os.makedirs(dbsDir)
+
+    pathToDb = os.path.join(dbsDir, dbName)
 
     if os.path.exists(pathToDb):
         os.remove(pathToDb)
 
-    print(pathToDb)
     dbconnection = sqlite3.connect(pathToDb)
     return dbconnection
+
+def connectToExistingSqliteDb(dbsDir, dbName):
+    pathToDb = os.path.join(dbsDir, dbName)
+
+    if not os.path.exists(pathToDb):
+        raise 'Database does not exist: ' + pathToDb
+
+    dbconnection = sqlite3.connect(pathToDb)
+    return dbconnection
+
 
 
 def closeSqliteConnection(connection):
@@ -61,10 +82,10 @@ def prepareSrcAndDestTables(connection):
 
     return len(albums)
 
-def runGradle(relPathToBuildFile, buildCommand):
+def runGradle(relPathToBuildFile, buildCommand, dbsDir):
     pySkriptPath = os.path.dirname(os.path.abspath(__file__))
     buildFilePath = os.path.join(pySkriptPath, relPathToBuildFile)
     initFilePath = os.path.join(pySkriptPath, "init.gradle")
-    gradleCall = "gradle -I " + initFilePath + " -b " + buildFilePath + " " + buildCommand
+    gradleCall = "gradle -I " + initFilePath + " -b " + buildFilePath + " -P dbsDir=" + dbsDir + " " + buildCommand
 
     return os.system(gradleCall)

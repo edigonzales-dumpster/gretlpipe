@@ -1,9 +1,9 @@
 import ch.so.agi.gretl.steps.*
 
 task invalidTargetConnection(type: Db2DbTask) {
-    sourceDb =  ['jdbc:sqlite:/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/tmp/db2db/invalidTargetConnection_SourceDb.sqlite',null,null]
-    targetDb = ['jdbc:sqlite:/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/tmp/db2db/dummyTarget.sqlite',null,null]
-    transferSet = [
-            new TransferSet('/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/db2db/sqlite/invalidTargetConnection.sql', 'dummy', true)
+    sourceDb =  ['jdbc:sqlite:' + dbsDir + '/db.sqlite',null,null]
+    targetDb = ['jdbc:sqlite:' + dbsDir + '/dummyTarget.sqlite',null,null]
+    transferSets = [
+            new TransferSet('invalidTargetConnection.sql', 'dummy', true)
     ];
 }

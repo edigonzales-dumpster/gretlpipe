@@ -1,8 +1,8 @@
 import ch.so.agi.gretl.steps.*
 
 task sqlExecutor(type: SqlExecutorTask){
-    database = ['jdbc:sqlite:/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/tmp/sqlexecutor/insertFromSelect.sqlite',null,null]
-    sqlFiles = ['/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/sqlexecutor/sqlite/insertFromSelect.sql']
+    database = ['jdbc:sqlite:' + dbsDir + '/db.sqlite',null,null]
+    sqlFiles = ['insertFromSelect.sql']
 }
 
 

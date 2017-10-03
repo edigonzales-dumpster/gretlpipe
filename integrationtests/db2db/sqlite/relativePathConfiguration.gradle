@@ -1,8 +1,10 @@
 import ch.so.agi.gretl.steps.*
 
+def dbConnString = 'jdbc:sqlite:' + dbsDir + '/db.sqlite'
+
 task relativePathConfiguration(type: Db2DbTask) {
-    sourceDb =  ['jdbc:sqlite:/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/tmp/db2db/relativePathConfiguration.sqlite',null,null]
-    targetDb = ['jdbc:sqlite:/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/tmp/db2db/relativePathConfiguration.sqlite',null,null]
+    sourceDb =  [dbConnString, null, null]
+    targetDb = [dbConnString, null, null]
     transferSets = [
             new TransferSet('relativePathConfiguration.sql', 'albums_dest', true)
     ];
