@@ -11,7 +11,10 @@ def assertGradleBuildReturnValue(expectSuccessfulBuild, buildReturnValue, owning
         #todo sqlexecutor Tests auf diese Methode refactoren
 
 
-def connectToNewSqliteDb(pathToDb):
+def connectToNewSqliteDb(relPathToDb):
+    pySkriptPath = os.path.dirname(os.path.abspath(__file__))
+    pathToDb = os.path.join(pySkriptPath, relPathToDb)
+
     if os.path.exists(pathToDb):
         os.remove(pathToDb)
 
