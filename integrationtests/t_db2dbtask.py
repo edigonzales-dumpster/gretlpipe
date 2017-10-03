@@ -127,7 +127,8 @@ class TestDb2DbTask(unittest.TestCase):
         dbPathSrc = "tmp/db2db/invalidSql_Source.sqlexecutor"
         dbPathDest = "tmp/db2db/invalidSql_Target.sqlexecutor"
 
-        conn = None
+        srcConn = None
+        targetConn = None
         try:
             srcConn = sqlsteps_common.connectToNewSqliteDb(dbPathSrc)
             targetConn = sqlsteps_common.connectToNewSqliteDb(dbPathSrc)
