@@ -18,6 +18,7 @@ def connectToNewSqliteDb(relPathToDb):
     if os.path.exists(pathToDb):
         os.remove(pathToDb)
 
+    print(pathToDb)
     dbconnection = sqlite3.connect(pathToDb)
     return dbconnection
 
