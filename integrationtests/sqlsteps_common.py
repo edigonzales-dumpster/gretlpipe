@@ -83,9 +83,17 @@ def prepareSrcAndDestTables(connection):
     return len(albums)
 
 def runGradle(relPathToBuildFile, buildCommand, dbsDir):
+    gradleHome = ''
+    try:
+        gradleHome = os.environ['GRADLE_HOME']
+    except:
+        dummy = None
+
+    gradleCmd = os.path.join(gradleHome, 'gradle')
+
     pySkriptPath = os.path.dirname(os.path.abspath(__file__))
     buildFilePath = os.path.join(pySkriptPath, relPathToBuildFile)
     initFilePath = os.path.join(pySkriptPath, "init.gradle")
-    gradleCall = "gradle -I " + initFilePath + " -b " + buildFilePath + " -P dbsDir=" + dbsDir + " " + buildCommand
+    gradleCall = gradleCmd + " -I " + initFilePath + " -b " + buildFilePath + " -P dbsDir=" + dbsDir + " " + buildCommand
 
     return os.system(gradleCall)
