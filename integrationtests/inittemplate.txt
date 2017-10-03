@@ -1,0 +1,16 @@
+allprojects {
+    buildscript {
+
+        repositories {
+            mavenCentral()
+            maven{
+                name "AIO AGI Repository"
+                url "_GRETL_JAR_URL_"
+            }
+        }
+
+        dependencies {
+            classpath group: 'ch.so.agi', name: 'gretl',  version: '_GRETL_VERSION_'
+        }
+    }
+}

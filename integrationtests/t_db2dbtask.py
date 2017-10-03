@@ -23,8 +23,7 @@ class TestDb2DbTask(unittest.TestCase):
 
             sqlsteps_common.closeSqliteConnection(conn)
 
-            res = os.system(
-                "gradle -b /home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/db2db/sqlite/relativePathConfiguration.gradle relativePathConfiguration")
+            res = sqlsteps_common.runGradle("db2db/sqlite/relativePathConfiguration.gradle", "relativePathConfiguration")
 
             sqlsteps_common.assertGradleBuildReturnValue(True, res, self)
 
@@ -52,8 +51,7 @@ class TestDb2DbTask(unittest.TestCase):
             srcRowCount = sqlsteps_common.prepareSrcAndDestTables(connA)
             self._statementChain_prepareDbB(connB)
 
-            res = os.system(
-                "gradle -b /home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/db2db/sqlite/statementChain.gradle bToA")
+            res = sqlsteps_common.runGradle("db2db/sqlite/statementChain.gradle",  "bToA")
 
             cursor = connA.cursor()
             cursor.execute("""select count(*) from albums_dest""")
@@ -94,8 +92,7 @@ class TestDb2DbTask(unittest.TestCase):
             connection = sqlsteps_common.connectToNewSqliteDb(dbPath)
             sqlsteps_common.closeSqliteConnection(connection)
 
-            res = os.system(
-                "gradle -b /home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/db2db/sqlexecutor/invalidSrcConnection.gradle invalidSrcConnection")
+            res = sqlsteps_common.runGradle("db2db/sqlexecutor/invalidSrcConnection.gradle", "invalidSrcConnection")
 
             sqlsteps_common.assertGradleBuildReturnValue(False, res, self)
 
@@ -115,8 +112,7 @@ class TestDb2DbTask(unittest.TestCase):
             connection = sqlsteps_common.connectToNewSqliteDb(dbPath)
             sqlsteps_common.closeSqliteConnection(connection)
 
-            res = os.system(
-                "gradle -b /home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/db2db/sqlexecutor/invalidTargetConnection.gradle invalidTargetConnection")
+            res = sqlsteps_common.runGradle("db2db/sqlexecutor/invalidTargetConnection.gradle", "invalidTargetConnection")
 
             sqlsteps_common.assertGradleBuildReturnValue(False, res, self)
 
@@ -140,8 +136,7 @@ class TestDb2DbTask(unittest.TestCase):
             sqlsteps_common.closeSqliteConnection(srcConn)
             sqlsteps_common.closeSqliteConnection(targetConn)
 
-            res = os.system(
-                "gradle -b /home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/db2db/sqlexecutor/invalidSql.gradle invalidSql")
+            res = sqlsteps_common.runGradle("db2db/sqlexecutor/invalidSql.gradle", "invalidSql")
 
             sqlsteps_common.assertGradleBuildReturnValue(False, res, self)
 

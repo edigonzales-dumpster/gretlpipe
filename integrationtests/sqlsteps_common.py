@@ -56,3 +56,11 @@ def prepareSrcAndDestTables(connection):
     connection.commit()
 
     return len(albums)
+
+def runGradle(relPathToBuildFile, buildCommand):
+    pySkriptPath = os.path.dirname(os.path.abspath(__file__))
+    buildFilePath = os.path.join(pySkriptPath, relPathToBuildFile)
+    initFilePath = os.path.join(pySkriptPath, "init.gradle")
+    gradleCall = "gradle -I " + initFilePath + " -b " + buildFilePath + " " + buildCommand
+
+    return os.system(gradleCall)
