@@ -4,7 +4,7 @@ task invalidSql(type: Db2DbTask) {
     sourceDb =  ['jdbc:sqlite:' + dbsDir + '/source.sqlite',null,null]
     targetDb = ['jdbc:sqlite:' + dbsDir + '/target.sqlite',null,null]
     transferSets = [
-            new TransferSet('/home/bjsvwjek/IdeaProjects/gretlpipe/integrationtests/db2db/sqlite/invalidSql.sql', 'albums_dest', false)
+            new TransferSet('invalidSql.sql', 'albums_dest', false)
     ];
 }
 
