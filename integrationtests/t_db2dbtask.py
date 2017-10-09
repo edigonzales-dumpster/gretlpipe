@@ -9,7 +9,7 @@ class TestDb2DbTask(unittest.TestCase):
     Executes the integration tests for the SqlExecutor Gradle Task
     """
 
-    def ttest_relativePathConfiguration_Sqlite(self):
+    def test_relativePathConfiguration_Sqlite(self):
         """
         Test's that the *.grade configuration of the sql files
         can be relative to the location of the gradle project (aka the *.gradle file)
@@ -32,7 +32,7 @@ class TestDb2DbTask(unittest.TestCase):
 
 
 
-    def ttest_statementChain_Sqlite(self):
+    def test_statementChain_Sqlite(self):
         """
         Test's that a chain of statements executes properly and results in the correct
         number of inserts (corresponding to the last statement)
@@ -79,7 +79,7 @@ class TestDb2DbTask(unittest.TestCase):
         connToDbB.commit()
 
 
-    def ttest_failsOnInvalidSrcConnection_Sqlite(self):
+    def test_failsOnInvalidSrcConnection_Sqlite(self):
         """
         Test's if the return value from the gradle build is <> 0 when trying to
         connect to a non existant database file
@@ -99,7 +99,7 @@ class TestDb2DbTask(unittest.TestCase):
             sqlsteps_common.closeSqliteConnection(connection)
 
 
-    def ttest_failsOnInvalidTargetConnection_Sqlite(self):
+    def test_failsOnInvalidTargetConnection_Sqlite(self):
         """
         Test's if the return value from the gradle build is <> 0 when trying to
         connect to a non existant database file
@@ -119,7 +119,7 @@ class TestDb2DbTask(unittest.TestCase):
             sqlsteps_common.closeSqliteConnection(connection)
 
 
-    def ttest_failsOnInvalidSql_Sqlite(self):
+    def test_failsOnInvalidSql_Sqlite(self):
         """
         Test's that a invalid sql statement on a valid database fails the gradle build
         """
