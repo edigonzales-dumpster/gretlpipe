@@ -1,0 +1,9 @@
+import ch.so.agi.gretl.steps.*
+
+task sourceToDestWithDelete(type: Db2DbTask) {
+    sourceDb =  ['jdbc:sqlite:'+dbsDir+'/db.sqlite',null,null]
+    targetDb = ['jdbc:sqlite:'+dbsDir+'/db.sqlite',null,null]
+    transferSets = [
+            new TransferSet('deleteTableSuccesful.sql', 'albums_dest', true)
+    ];
+}

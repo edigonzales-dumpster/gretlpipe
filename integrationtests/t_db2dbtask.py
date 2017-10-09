@@ -9,7 +9,7 @@ class TestDb2DbTask(unittest.TestCase):
     Executes the integration tests for the SqlExecutor Gradle Task
     """
 
-    def test_relativePathConfiguration_Sqlite(self):
+    def ttest_relativePathConfiguration_Sqlite(self):
         """
         Test's that the *.grade configuration of the sql files
         can be relative to the location of the gradle project (aka the *.gradle file)
@@ -32,7 +32,7 @@ class TestDb2DbTask(unittest.TestCase):
 
 
 
-    def test_statementChain_Sqlite(self):
+    def ttest_statementChain_Sqlite(self):
         """
         Test's that a chain of statements executes properly and results in the correct
         number of inserts (corresponding to the last statement)
@@ -79,7 +79,7 @@ class TestDb2DbTask(unittest.TestCase):
         connToDbB.commit()
 
 
-    def test_failsOnInvalidSrcConnection_Sqlite(self):
+    def ttest_failsOnInvalidSrcConnection_Sqlite(self):
         """
         Test's if the return value from the gradle build is <> 0 when trying to
         connect to a non existant database file
@@ -99,7 +99,7 @@ class TestDb2DbTask(unittest.TestCase):
             sqlsteps_common.closeSqliteConnection(connection)
 
 
-    def test_failsOnInvalidTargetConnection_Sqlite(self):
+    def ttest_failsOnInvalidTargetConnection_Sqlite(self):
         """
         Test's if the return value from the gradle build is <> 0 when trying to
         connect to a non existant database file
@@ -119,7 +119,7 @@ class TestDb2DbTask(unittest.TestCase):
             sqlsteps_common.closeSqliteConnection(connection)
 
 
-    def test_failsOnInvalidSql_Sqlite(self):
+    def ttest_failsOnInvalidSql_Sqlite(self):
         """
         Test's that a invalid sql statement on a valid database fails the gradle build
         """
@@ -142,6 +142,34 @@ class TestDb2DbTask(unittest.TestCase):
         finally:
             sqlsteps_common.closeSqliteConnection(srcConn)
             sqlsteps_common.closeSqliteConnection(targetConn)
+
+
+    def test_deleteTableSuccesful_Sqlite(self):
+        """
+        Test's that the delete flag of the Db2dbTask's Transferset works properly
+        """
+        dbsDir = sqlsteps_common.absDir('tmp/db2db/deleteTableSuccesful')
+
+        dbName = 'db.sqlite'
+        conn = None
+        try:
+            conn = sqlsteps_common.connectToNewSqliteDb(dbsDir, dbName)
+            srcRowCount = sqlsteps_common.prepareSrcAndDestTables(conn)
+
+            sqlsteps_common.closeSqliteConnection(conn)
+
+            sqlsteps_common.runGradle("db2db/sqlite/deleteTableSuccesful.gradle", "sourceToDestWithDelete", dbsDir)
+
+            conn = sqlsteps_common.connectToExistingSqliteDb(dbsDir, dbName)
+            cursor = conn.cursor()
+            cursor.execute("""select count(*) from albums_dest""")
+
+            destRowCount = cursor.fetchone()[0]
+
+            self.assertEqual(srcRowCount, destRowCount, "First data transfer should have been deleted")
+            self.assertGreater(destRowCount, 0, "Destination row count must be greater than zero")
+        finally:
+            sqlsteps_common.closeSqliteConnection(conn)
 
 
 if __name__ == '__main__':

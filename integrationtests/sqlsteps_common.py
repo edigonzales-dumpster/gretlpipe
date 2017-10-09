@@ -72,15 +72,21 @@ def prepareSrcAndDestTables(connection):
     cursor.executemany("INSERT INTO albums_src VALUES (?,?,?,?,?)",
                        albums)
 
+    srcCount = len(albums)
+
     #create target table
     cursor.execute("""CREATE TABLE albums_dest
                           (title text, artist text, release_date text,
                            publisher text, media_type text)
                        """)
 
+    albums.pop(0);
+    cursor.executemany("INSERT INTO albums_dest VALUES (?,?,?,?,?)",
+                       albums)
+
     connection.commit()
 
-    return len(albums)
+    return srcCount
 
 def runGradle(relPathToBuildFile, buildCommand, dbsDir):
     gradleHome = ''
@@ -89,11 +95,11 @@ def runGradle(relPathToBuildFile, buildCommand, dbsDir):
     except:
         dummy = None
 
-    gradleCmd = os.path.join(gradleHome, 'gradle')
+    gradleCmd = os.path.join(gradleHome, 'bin/gradle')
 
     pySkriptPath = os.path.dirname(os.path.abspath(__file__))
     buildFilePath = os.path.join(pySkriptPath, relPathToBuildFile)
     initFilePath = os.path.join(pySkriptPath, "init.gradle")
-    gradleCall = gradleCmd + " -I " + initFilePath + " -b " + buildFilePath + " -P dbsDir=" + dbsDir + " " + buildCommand
+    gradleCall = gradleCmd + " -I " + initFilePath + " --refresh-dependencies -b " + buildFilePath + " -P dbsDir=" + dbsDir + " " + buildCommand
 
     return os.system(gradleCall)
