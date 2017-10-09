@@ -49,7 +49,7 @@ def closeSqliteConnection(connection):
         connection.close()
 
 
-def prepareSrcAndDestTables(connection):
+def prepareSrcAndDestTables(connection, fillDestTable=False):
 
     cursor = connection.cursor()
 
@@ -74,15 +74,15 @@ def prepareSrcAndDestTables(connection):
 
     srcCount = len(albums)
 
-    #create target table
+    # create target table
     cursor.execute("""CREATE TABLE albums_dest
                           (title text, artist text, release_date text,
                            publisher text, media_type text)
                        """)
 
-    albums.pop(0);
-    cursor.executemany("INSERT INTO albums_dest VALUES (?,?,?,?,?)",
-                       albums)
+    if fillDestTable:
+        albums.pop(0);
+        cursor.executemany("INSERT INTO albums_dest VALUES (?,?,?,?,?)", albums)
 
     connection.commit()
 

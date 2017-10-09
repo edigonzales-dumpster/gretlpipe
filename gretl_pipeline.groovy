@@ -43,7 +43,7 @@ pipeline {
                 git 'https://github.com/uncoyote/gretlv1.git'
 
                 // Run the gradle build
-                sh GRADLE_HOME + "gradle build"
+                sh GRADLE_HOME + "bin/gradle build"
             }
         }
         stage('Snapshot Jar') {
@@ -52,7 +52,7 @@ pipeline {
                 GRETL_JAR_URL = "$GRETL_JAR_BASEURL" + '-snapshot'
             }
             steps { //publish to snapshot
-                sh GRADLE_HOME + "gradle publish"
+                sh GRADLE_HOME + "bin/gradle publish"
             }
         }
         stage('Integration Test'){
@@ -80,7 +80,7 @@ pipeline {
                 GRETL_JAR_URL = "$GRETL_JAR_BASEURL"
             }
             steps { //publish to release
-                sh GRADLE_HOME + "${params.AVOID_PROD_PUBLICATION}" + "gradle publish"
+                sh GRADLE_HOME + "${params.AVOID_PROD_PUBLICATION}" + "bin/gradle publish"
 
                 dir('./itest/integrationtests'){
                     sh "cp inittemplate.txt init.gradle"

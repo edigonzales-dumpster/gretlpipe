@@ -154,7 +154,7 @@ class TestDb2DbTask(unittest.TestCase):
         conn = None
         try:
             conn = sqlsteps_common.connectToNewSqliteDb(dbsDir, dbName)
-            srcRowCount = sqlsteps_common.prepareSrcAndDestTables(conn)
+            srcRowCount = sqlsteps_common.prepareSrcAndDestTables(conn, True)
 
             sqlsteps_common.closeSqliteConnection(conn)
 
